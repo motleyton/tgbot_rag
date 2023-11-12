@@ -49,7 +49,6 @@ class OpenAI:
         self.system_prompt = config['system_prompt']
         self.db = Database(config)
         self.db, self.template = self.db.open_database()
-
         self.temperature = config['temperature']
 
 

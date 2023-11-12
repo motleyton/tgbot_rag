@@ -29,14 +29,8 @@ class ChatGPTTelegramBot:
 
     async def message_handler(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         user_message = update.message.text
-
-        # Инициализация чата и получение QA чейна
         qa_chain = self.openai.initialize_chat()
-
-        # Получение ответа
-        response = qa_chain.run(user_message)  # Убран await, так как предполагается, что run синхронный
-
-        # Отправка ответа пользователю
+        response = qa_chain.run(user_message)
         await update.message.reply_text(response)
 
 

@@ -7,12 +7,17 @@ from langchain.vectorstores import FAISS
 class Database:
     def __init__(self, config: dict):
         self.folder_id = config['folder_id']
+        self.credentials_path = config['credentials_path']
+        self.token_path = config['token_path']
 
     def open_database(self):
         folder_id = self.folder_id
+        credentials_path = self.credentials_path
+        token_path = self.token_path
+
         loader = GoogleDriveLoader(folder_id=folder_id,
-                                   credentials_path="/home/bmf/Desktop/freelance/tgbot_rag/Credentials.json",
-                                   token_path='/home/bmf/Desktop/freelance/tgbot_rag/token.json')
+                                   credentials_path=credentials_path,
+                                   token_path=token_path)
 
         text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=4000, chunk_overlap=0, separators=[" ", ",", "\n"]

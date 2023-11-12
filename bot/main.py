@@ -27,7 +27,9 @@ def main():
     model = os.environ.get('OPENAI_MODEL')
     openai_config = {
         'folder_id': os.environ['FOLDER_ID'],
-        'prompt_id': os.environ['PROMPT_ID'],
+        'credentials_path': os.environ['GOOGLE_CRENDETIALS_PATH'],
+        'token_path': os.environ['GOOGLE_TOKEN_PATH'],
+        #'prompt_id': os.environ['PROMPT_ID'],
         'api_key': os.environ['OPENAI_API_KEY'],
 
         'max_history_size': int(os.environ.get('MAX_HISTORY_SIZE', 15)),
@@ -49,7 +51,7 @@ def main():
     telegram_config = {
         'token': os.environ['TELEGRAM_BOT_TOKEN'],
         'bot_language': os.environ.get('BOT_LANGUAGE'),
-        'folder_id': os.environ['FOLDER_ID'],
+
 
     }
 

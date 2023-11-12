@@ -36,6 +36,9 @@ def localized_text(key, bot_language):
         return key
 
 
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
+
 class OpenAI:
     def __init__(self, config: dict):
         """
@@ -43,13 +46,19 @@ class OpenAI:
         :param config: A dictionary containing the GPT configuration
         """
         openai.api_key = config['api_key']
-        # openai.proxy = config['proxy']
         self.config = config
         self.model_name = config['model']
         self.system_prompt = config['system_prompt']
-        self.db = Database(config)
-        self.db, self.template = self.db.open_database()
+        self.db_instance = Database(config)
+        self.db, self.template = self.db_instance.open_database()
         self.temperature = config['temperature']
+
+    def reload_database(self, new_db, new_template):
+        """
+        Updates the database and template in OpenAI instance.
+        """
+        self.db = new_db
+        self.template = new_template
 
 
     def initialize_chat(self):
@@ -63,7 +72,6 @@ class OpenAI:
             template=self.template, input_variables=["context", "question"]
         )
         chain_type_kwargs = {"prompt": PROMPT, 'verbose': False}
-
 
         qa_chain = RetrievalQA.from_chain_type(
             llm=llm,

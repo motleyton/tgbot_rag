@@ -29,7 +29,6 @@ def main():
         'folder_id': os.environ['FOLDER_ID'],
         'credentials_path': os.environ['GOOGLE_CRENDETIALS_PATH'],
         'token_path': os.environ['GOOGLE_TOKEN_PATH'],
-        #'prompt_id': os.environ['PROMPT_ID'],
         'api_key': os.environ['OPENAI_API_KEY'],
 
         'max_history_size': int(os.environ.get('MAX_HISTORY_SIZE', 15)),
@@ -38,21 +37,13 @@ def main():
         'model': model,
     }
 
-    # log deprecation warning for old budget variable names
-    # old variables are caught in the telegram_config definition for now
-    # remove support for old budget names at some point in the future
-    if os.environ.get('MONTHLY_USER_BUDGETS') is not None:
-        logging.warning('The environment variable MONTHLY_USER_BUDGETS is deprecated. '
-                        'Please use USER_BUDGETS with BUDGET_PERIOD instead.')
-    if os.environ.get('MONTHLY_GUEST_BUDGET') is not None:
-        logging.warning('The environment variable MONTHLY_GUEST_BUDGET is deprecated. '
-                        'Please use GUEST_BUDGET with BUDGET_PERIOD instead.')
-
     telegram_config = {
+        'allowed_usernames': os.environ.get('ALLOWED_USERNAMES'),
         'token': os.environ['TELEGRAM_BOT_TOKEN'],
         'bot_language': os.environ.get('BOT_LANGUAGE'),
-
-
+        'folder_id': os.environ['FOLDER_ID'],
+        'credentials_path': os.environ['GOOGLE_CRENDETIALS_PATH'],
+        'token_path': os.environ['GOOGLE_TOKEN_PATH'],
     }
 
     # Setup and run ChatGPT and Telegram bot

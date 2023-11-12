@@ -27,6 +27,7 @@ def main():
     model = os.environ.get('OPENAI_MODEL')
     openai_config = {
         'folder_id': os.environ['FOLDER_ID'],
+        'prompt_id': os.environ['PROMPT_ID'],
         'api_key': os.environ['OPENAI_API_KEY'],
 
         'max_history_size': int(os.environ.get('MAX_HISTORY_SIZE', 15)),

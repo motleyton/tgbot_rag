@@ -3,12 +3,14 @@ import os
 import openai
 import json
 
-from langchain.chains import LLMChain, RetrievalQA
+from langchain.chains import LLMChain, RetrievalQA, ConversationalRetrievalChain
+from langchain.chains.qa_with_sources import load_qa_with_sources_chain
 from langchain.chat_models import ChatOpenAI
 from langchain.embeddings import OpenAIEmbeddings
+from langchain.memory import ConversationTokenBufferMemory
 from langchain.prompts import PromptTemplate
 from langchain.vectorstores import FAISS
-from telegram import Update
+from langchain.llms import OpenAI
 
 from database_helper import Database
 # Load translations
@@ -46,6 +48,8 @@ class OpenAI:
         self.model_name = config['model']
         self.system_prompt = config['system_prompt']
         self.db = Database(config)
+        self.db, self.template = self.db.open_database()
+
         self.temperature = config['temperature']
 
 
@@ -55,33 +59,19 @@ class OpenAI:
             openai_api_key=openai.api_key,
             model_name=self.model_name,
         )
-        embeddings = OpenAIEmbeddings(openai_api_key=openai.api_key)
-        texts = self.db.open_database()
-        db = FAISS.from_documents(texts, embeddings)
-        db.as_retriever()
-        db.save_local('faiss_index')
 
-        template = '''
-        Ответь на вопрос используя {text_input}. Отвечай на русском языке
-        '''
-
-        prompt = PromptTemplate(
-            input_variables=["text_input"],
-            template=template
+        PROMPT = PromptTemplate(
+            template=self.template, input_variables=["context", "question"]
         )
+        chain_type_kwargs = {"prompt": PROMPT, 'verbose': False}
 
-        chain = LLMChain(llm=llm, prompt=prompt)
 
-        qa = RetrievalQA.from_chain_type(
+        qa_chain = RetrievalQA.from_chain_type(
             llm=llm,
-            chain_type="stuff",
-            retriever=db.as_retriever()
+            retriever=self.db.as_retriever(),
+            chain_type_kwargs=chain_type_kwargs
         )
-
-        return chain, qa
-
-
-
+        return qa_chain
 
 
 

@@ -30,9 +30,6 @@ def main():
         'credentials_path': os.environ['GOOGLE_CRENDETIALS_PATH'],
         'token_path': os.environ['GOOGLE_TOKEN_PATH'],
         'api_key': os.environ['OPENAI_API_KEY'],
-
-        'max_history_size': int(os.environ.get('MAX_HISTORY_SIZE', 15)),
-        'system_prompt': os.environ.get('SYSTEM_PROMPT'),
         'temperature': float(os.environ.get('TEMPERATURE', 0)),
         'model': model,
     }

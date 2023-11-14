@@ -48,7 +48,6 @@ class OpenAI:
         openai.api_key = config['api_key']
         self.config = config
         self.model_name = config['model']
-        self.system_prompt = config['system_prompt']
         self.db_instance = Database(config)
         self.db, self.template = self.db_instance.open_database()
         self.temperature = config['temperature']
@@ -68,13 +67,21 @@ class OpenAI:
             model_name=self.model_name,
         )
 
-        PROMPT = PromptTemplate(
-            template=self.template, input_variables=["context", "question"]
+        template = '''Используй данные из контекста, чтобы предоставить точный и информативный ответ.
+                    Мои ответы будут строго основаны на данных, без добавления какой-либо выдуманной информации.
+                    {context}
+
+                    Вопрос: {question}
+                    '''
+
+        prompt = PromptTemplate(
+            template=self.template, input_variables=["question", "context"]
         )
-        chain_type_kwargs = {"prompt": PROMPT, 'verbose': False}
+        chain_type_kwargs = {"prompt": prompt, 'verbose': False}
 
         qa_chain = RetrievalQA.from_chain_type(
             llm=llm,
+            chain_type="stuff",
             retriever=self.db.as_retriever(),
             chain_type_kwargs=chain_type_kwargs
         )

@@ -1,5 +1,3 @@
-import os
-
 from langchain.document_loaders import GoogleDriveLoader
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -30,6 +28,7 @@ class Database:
             )
 
             docs = loader.load()
+            docs = text_splitter.split_documents(docs)
             texts = []
 
             for page in docs:
@@ -38,7 +37,6 @@ class Database:
                     prompt = page.page_content
                 else:
                     texts.append(page)
-            texts = text_splitter.split_documents(texts)
 
             embeddings = OpenAIEmbeddings(openai_api_key=openai.api_key)
             db = FAISS.from_documents(texts, embeddings)

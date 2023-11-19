@@ -10,11 +10,9 @@ async def error_handler(_: object, context: ContextTypes.DEFAULT_TYPE) -> None:
     """
     Handles errors in the telegram-python-bot library.
     """
-    # Логирование содержимого обновления
     if context.update:
         logging.error(f"Update that caused the error: {context.update}")
 
-    # Логирование стектрейса
     logging.error(f"Exception while handling an update: {context.error}\n{traceback.format_exc()}")
 
 def message_text(message: Message) -> str:

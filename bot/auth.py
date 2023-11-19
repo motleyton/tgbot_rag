@@ -25,6 +25,8 @@ def authenticate_google_api(credentials_path, token_path, scopes):
     return creds
 
 
+# Выполните аутентификацию и получите токен
+
 # Замените на ваш путь к файлу credentials.json
 credentials_path = '/home/bmf/Desktop/freelance/tgbot_rag/Credentials.json'
 # Замените на путь, где хотите сохранить token.json
@@ -32,5 +34,3 @@ token_path = '/home/bmf/Desktop/freelance/tgbot_rag/token.json'
 # Укажите нужные вам разрешения (scopes)
 scopes = ['https://www.googleapis.com/auth/drive']
 
-# Выполните аутентификацию и получите токен
-authenticate_google_api(credentials_path, token_path, scopes)

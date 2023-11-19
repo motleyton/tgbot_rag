@@ -3,14 +3,11 @@ import os
 import openai
 import json
 
-from langchain.chains import LLMChain, RetrievalQA, ConversationalRetrievalChain
-from langchain.chains.qa_with_sources import load_qa_with_sources_chain
+from langchain.chains import RetrievalQA
 from langchain.chat_models import ChatOpenAI
-from langchain.embeddings import OpenAIEmbeddings
-from langchain.memory import ConversationTokenBufferMemory
+
 from langchain.prompts import PromptTemplate
-from langchain.vectorstores import FAISS
-from langchain.llms import OpenAI
+
 
 from database_helper import Database
 # Load translations
@@ -32,7 +29,6 @@ def localized_text(key, bot_language):
         if key in translations['en']:
             return translations['en'][key]
         logging.warning(f"No english definition found for key '{key}' in translations.json")
-        # return key as text
         return key
 
 

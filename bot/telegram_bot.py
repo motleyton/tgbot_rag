@@ -4,6 +4,7 @@ from telegram import Update, ReplyKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, \
     filters, ContextTypes, CallbackContext
 
+from auth import authenticate_google_api
 from database_helper import Database
 from utils import error_handler
 from openai_helper import localized_text, OpenAI
@@ -62,15 +63,16 @@ class ChatGPTTelegramBot:
             return
 
         try:
-            # Обновление базы данных через Database
-            new_db, new_template = self.db.open_database()
+            # Здесь вызываем функцию аутентификации перед обновлением базы данных
+            authenticate_google_api(self.config['credentials_path'], self.config['token_path'],  scopes=['https://www.googleapis.com/auth/drive'])
 
-            # Обновление экземпляра OpenAI с новой базой данных и шаблоном
+            new_db, new_template = self.db.open_database()
             self.openai.reload_database(new_db, new_template)
 
             await update.message.reply_text("База данных успешно обновлена!")
         except Exception as e:
-            await update.message.reply_text(f"Произошла ошибка при обновлении базы данных: {e}")
+            print(e)
+            await update.message.reply_text(f"Произошла ошибка при обновлении базы данных")
 
 
     def run(self):

@@ -6,6 +6,7 @@ from langchain.vectorstores import FAISS
 
 import logging
 
+
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
@@ -14,6 +15,7 @@ class Database:
         self.folder_id = config['folder_id']
         self.credentials_path = config['credentials_path']
         self.token_path = config['token_path']
+
 
     def open_database(self):
         try:

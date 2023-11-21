@@ -63,13 +63,6 @@ class OpenAI:
             model_name=self.model_name,
         )
 
-        template = '''Используй данные из контекста, чтобы предоставить точный и информативный ответ.
-                    Мои ответы будут строго основаны на данных, без добавления какой-либо выдуманной информации.
-                    {context}
-
-                    Вопрос: {question}
-                    '''
-
         prompt = PromptTemplate(
             template=self.template, input_variables=["question", "context"]
         )
